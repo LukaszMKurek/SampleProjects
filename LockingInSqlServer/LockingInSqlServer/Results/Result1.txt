@@ -1,0 +1,45 @@
+Laptop 4 core CPU
+
+simple select.......................................... Avg: 2,0424 ms; 29240,09 Request/s
+simple select.......................................... Avg: 1,9621 ms; 32455,93 Request/s
+simple select.......................................... Avg: 1,8493 ms; 34433,19 Request/s
+
+simple update.......................................... Avg: 4,6709 ms; 13443,02 Request/s
+simple update.......................................... Avg: 4,7992 ms; 13151,28 Request/s
+simple update.......................................... Avg: 4,8266 ms; 13022,55 Request/s
+
+update in transaction.................................. Avg: 5,5200 ms; 11165,90 Request/s
+update in transaction.................................. Avg: 5,6073 ms; 10576,22 Request/s
+update in transaction.................................. Avg: 5,7145 ms; 10286,71 Request/s
+
+simple select and update in transaction................ Avg: 4,0956 ms; 15362,17 Request/s
+simple select and update in transaction................ Avg: 4,1802 ms; 14069,87 Request/s
+simple select and update in transaction................ Avg: 4,0575 ms; 15136,66 Request/s
+
+select with lock and update in transaction............. Avg: 4,1089 ms; 14692,96 Request/s
+select with lock and update in transaction............. Avg: 3,8181 ms; 14861,15 Request/s
+select with lock and update in transaction............. Avg: 3,9522 ms; 15961,80 Request/s
+
+getapplock, select and update in transaction........... Avg: 4,6527 ms; 12431,54 Request/s
+getapplock, select and update in transaction........... Avg: 4,6406 ms; 12387,60 Request/s
+getapplock, select and update in transaction........... Avg: 5,1094 ms; 11468,70 Request/s
+
+many round trips, simple select and update............. Avg: 36,9106 ms; 1729,47 Request/s
+many round trips, simple select and update............. Avg: 22,0482 ms; 8714,37 Request/s
+many round trips, simple select and update............. Avg: 16,7511 ms; 9785,36 Request/s
+
+many round trips, select with lock and update.......... Avg: 6,4956 ms; 9641,20 Request/s
+many round trips, select with lock and update.......... Avg: 6,2428 ms; 10338,17 Request/s
+many round trips, select with lock and update.......... Avg: 6,1677 ms; 10349,15 Request/s
+
+many round trips, getapplock, select and update........ Avg: 8,0361 ms; 7808,17 Request/s
+many round trips, getapplock, select and update........ Avg: 8,0800 ms; 7821,97 Request/s
+many round trips, getapplock, select and update........ Avg: 8,0271 ms; 7880,34 Request/s
+
+many round trips, getapplock (2), select and update.... Avg: 6,9689 ms; 9082,16 Request/s
+many round trips, getapplock (2), select and update.... Avg: 6,9695 ms; 8980,87 Request/s
+many round trips, getapplock (2), select and update.... Avg: 7,1066 ms; 8519,36 Request/s
+
+many round trips, getapplock (3), select and update.... Avg: 7,8978 ms; 8019,26 Request/s
+many round trips, getapplock (3), select and update.... Avg: 7,9488 ms; 7781,35 Request/s
+many round trips, getapplock (3), select and update.... Avg: 8,0448 ms; 7660,46 Request/s
