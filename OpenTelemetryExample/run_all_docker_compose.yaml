@@ -1,0 +1,80 @@
+version: '3.9'
+services:
+  jaeger:
+    privileged: true
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "16686:16686"
+    networks:
+    - otel_example_network
+
+  otel-collector:
+    privileged: true
+    image: otel/opentelemetry-collector:latest
+    container_name: otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"
+    networks:
+    - otel_example_network
+    depends_on:
+      - jaeger
+
+  sql-server-database:
+    privileged: true
+    container_name: sql-server-database
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    networks:
+    - otel_example_network
+    ports:
+      - "14331:1433"
+    environment:
+      SA_PASSWORD: "abc123xyzA."
+      ACCEPT_EULA: "Y"
+      h: "sql-server-database"
+
+  web-application-1:
+    privileged: true
+    container_name: web-application-1
+    build:
+      context: ./
+      dockerfile: ./WebApplication1/Dockerfile
+    restart: always
+    networks:
+      - otel_example_network
+    depends_on:
+      - otel-collector
+      - web-application-2
+    ports:
+      - "7725:7725"
+    environment:
+      "ASPNETCORE_URLS": "http://+:7725/"
+      "ASPNETCORE_ENVIRONMENT": "Development"
+      "WebApplication2Url": "http://web-application-2:7728/"
+      "OtlpExporterUrl": "http://otel-collector:4317"
+
+  web-application-2:
+    privileged: true
+    container_name: web-application-2
+    build:
+      context: .
+      dockerfile: ./WebApplication2/Dockerfile
+    restart: always
+    networks:
+      - otel_example_network
+    depends_on:
+      - sql-server-database
+      - otel-collector
+    ports:
+      - "7728:7728"
+    environment:
+      "ASPNETCORE_URLS": "http://+:7728/"
+      "ASPNETCORE_ENVIRONMENT": "Development"
+      "ConnectionStrings__DefaultConnection": "Server=sql-server-database,1433;Database=web-application-2-db;User ID=sa;Password=abc123xyzA.;Connection Timeout=20;TrustServerCertificate=true;Encrypt=true;"
+      "OtlpExporterUrl": "http://otel-collector:4317"
+
+networks:
+  otel_example_network: {}
