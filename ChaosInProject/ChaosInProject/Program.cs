@@ -87,27 +87,36 @@ namespace LockingAlgorithms
                 // Implementacja jest błędna i produkuje losowe wyniki
                 // dodawanie liczb nie jest bezpieczne wielowątkowo
                 // gdy mamy 1 wątek sekwencja operacji jest prosta
+
                 // read x from memory
                 // x = x + 1
                 // write x to memory
+
                 // read x from memory
                 // x = x + 1
                 // write x to memory
+
                 // jeśli jednak kilka wątków pracuje nad jedna zmienną pojawiają się dodatkowe nie pożądane sekwencje np:
+
                 // T1: read x from memory
                 // T2: read x from memory
                 // T1: x = x + 1
                 // T2: x = x + 1
                 // T1: write x to memory
                 // T2: write x to memory
+
                 // efekt jest taki że x w pamięci nie powiększył się o 2 ale tylko o 1
-                // są możliwe sytuacje że x w pamięci się powiększy o kilka ale powolny jeden wątek w rzuci do pamięci mocno nie aktualną wersję i cofniemy się w efekcie w czasie
+                // są możliwe sytuacje że x w pamięci się powiększy o kilka ale powolny jeden wątek wrzuci do pamięci mocno nie aktualną wersję i cofniemy się w efekcie w czasie
+                // race condition cofa część obliczeń w przeszłość
+
+                // https://www.youtube.com/watch?v=MqnpIwN7dz0
             });
 
             var elapsed = Stopwatch.GetElapsedTime(t);
             Console.WriteLine($"Sum: {sum}; Elapsed: {elapsed.TotalMilliseconds} ms");
         }
 
+        // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/volatile
         // Słowo kluczowe volatile nie jest rozwiązaniem problemu
         // Kiedyś było rozwiązaniem ale komputery się pokomplikowały i już nie jest to rozwiązanie
         // Część prawd ma swój termin ważności i jak on minie stają się tylko historycznymi faktami - ludziom bardzo często to umyka
@@ -119,6 +128,8 @@ namespace LockingAlgorithms
         // Następcą volatile jako prostego rozwiązania pierwszego wyboru jest lock
         // Poniżej niedawny przykład że sprzęt nadal się zmienia
         // https://github.com/dotnet/runtime/issues/93624
+        // https://github.com/dotnet/runtime/pull/93766/files
+        // https://github.com/dotnet/runtime/pull/93828/files
         // to co kiedyś było dobre nie koniecznie musi być dobre w przyszłości
         // to co obecnie potęguje problemy wielowątkowe to dynamiczna zmiana prędkości rdzeni, rdzenie heterogeniczne, stopniowe wycofywanie się z 32 bitowych programów
         // popularne stają się także architektury z luźniejszymi zasadami pracy, oferują większą wydajność kosztem koszmarnych problemów z wielowątkowością
@@ -142,10 +153,11 @@ namespace LockingAlgorithms
                     // Zalety:
                     // przyzwoicie szybkie nawet w pesymistycznych warunkach
                     // jedno z najprostszych rozwiązań
+                    // istnieją narzędzia do analiz
 
                     // Wady:
                     // ryzyko deadlocków - można się jednak przed nimi zabezpieczyć w 100% jeśli przestrzega się kilku prostych reguł
-                    // ryzyko opóźnień przez lock contention
+                    // ryzyko opóźnień przez lock contention - tylko jeśli działamy w niekorzystnych warunkach
                     
                     // trzeba stosować maksymalnie krótkie sekcje krytyczne na maksymalnie niezależnych obiektach
                 }
